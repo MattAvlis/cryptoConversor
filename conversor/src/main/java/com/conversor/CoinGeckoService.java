@@ -31,6 +31,9 @@ public class CoinGeckoService implements CryptoService {
             .build(new CacheLoader<>() {
                 @Override
                 public CryptoInfo load(String key) throws IOException {
+                    if (key.isBlank()) {
+                        throw new IOException("Query cannot be blank");
+                    }
                     return findCryptoInfoFromAPI(key);
                 }
             });
@@ -100,6 +103,7 @@ public class CoinGeckoService implements CryptoService {
 
     @Override
     public String getCryptoSummary(String query) {
+
         CryptoInfo cryptoInfo = findCryptoInfo(query);
         if (cryptoInfo == null) {
             return "Crypto not found.";
